@@ -17,6 +17,9 @@ import android.os.Build;
 
 public class MainActivity extends FragmentActivity {
 
+
+
+    //VERSIONE CONDIVISA SU GITHUB, 07.12.2014 ore 13.51
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
