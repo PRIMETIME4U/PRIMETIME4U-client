@@ -22,5 +22,5 @@
         android:theme="@style/Widget.AppCompat.Light.ActionButton"
         style="@style/Base.TextAppearance.AppCompat.Button"
         android:background="#ffffffff"
-        android:shadowColor="#ffacbbff" />
+        android:singleLine="true" />
 </RelativeLayout>

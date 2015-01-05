@@ -33,6 +33,7 @@ import primetime4u.adapter.CustomListAdapter;
 import primetime4u.app.AppController;
 import primetime4u.model.Movie;
 
+import com.dexafree.materialList.view.WelcomeCardItemView;
 
 public class MainActivity extends FragmentActivity {
 

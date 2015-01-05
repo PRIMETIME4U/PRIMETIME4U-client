@@ -23,6 +23,15 @@
             android:name="gwc.com.primetime4u.ActivityListaFilm"
             android:label="@string/title_activity_activity_lista_film" >
         </activity>
+        <activity
+            android:name="gwc.com.primetime4u.SplashActivity"
+            android:label="@string/title_activity_splash" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
