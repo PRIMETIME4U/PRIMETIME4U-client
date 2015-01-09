@@ -12,15 +12,25 @@
         android:id="@+id/textView"
         android:layout_gravity="center"
         android:textColor="#ffd7d6ff"
-        android:layout_above="@+id/listView"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="77dp" />
 
     <ListView
         android:layout_width="250dp"
-        android:layout_height="400dp"
+        android:layout_height="100dp"
         android:id="@+id/listView"
         android:layout_gravity="left|top"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp" />
+
+    <WebView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/webView"
+        android:layout_below="@+id/listView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="71dp" />
 
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package gwc.com.primetime4u;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.webkit.WebView;
 import android.widget.ListView;
 
 import com.android.volley.Response;
@@ -33,7 +35,19 @@ import primetime4u.adapter.CustomListAdapter;
 import primetime4u.app.AppController;
 import primetime4u.model.Movie;
 
-import com.dexafree.materialList.view.WelcomeCardItemView;
+import com.dexafree.materialList.controller.OnDismissCallback;
+import com.dexafree.materialList.model.BasicButtonsCard;
+import com.dexafree.materialList.model.BasicImageButtonsCard;
+import com.dexafree.materialList.model.BasicListCard;
+import com.dexafree.materialList.model.BigImageButtonsCard;
+import com.dexafree.materialList.model.BigImageCard;
+import com.dexafree.materialList.model.Card;
+import com.dexafree.materialList.model.SmallImageCard;
+import com.dexafree.materialList.model.WelcomeCard;
+import com.dexafree.materialList.view.IMaterialView;
+import com.dexafree.materialList.view.MaterialListView;
+import com.dexafree.materialList.view.MaterialStaggeredGridView;
+
 
 public class MainActivity extends FragmentActivity {
 
@@ -44,13 +58,20 @@ public class MainActivity extends FragmentActivity {
     private List<Movie> movieList = new ArrayList<Movie>();
     private ListView listView;
     private CustomListAdapter adapter;
+    private Context mContext;
+    private IMaterialView mListView;
 
 
-    //VERSIONE CONDIVISA SU GITHUB, 07.12.2014 ore 13.51
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContext = this;
+
+
+        //TODO: https://github.com/dexafree/MaterialList/blob/master/app/src/main/java/com/dexafree/materiallistviewexample/MainActivity.java
+
+
         android.app.FragmentManager fm = getFragmentManager();
         android.app.FragmentTransaction ft = fm.beginTransaction();
         Fragment button = new ButtonLista();
@@ -139,7 +160,8 @@ public class MainActivity extends FragmentActivity {
         //ASSOCIA A OGNI FRAGMENT LISTENER -> activity film cliccato -> lo guardo/non lo guardo
 
 
-
+        WebView wv = (WebView) findViewById(R.id.webView);
+        wv.loadUrl("http://hale-kite-786.appspot.com/");
 
 
     }
