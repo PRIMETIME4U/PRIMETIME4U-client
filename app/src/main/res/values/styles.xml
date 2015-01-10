@@ -1,8 +1,17 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
-    </style>
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="actionBarStyle">@style/MyActionBar</item>
 
+    </style>
+    <style name="MyActionBar"
+        parent="@style/Widget.AppCompat.ActionBar">
+        //Perchè cazzo non cambia colore?
+        <item name="android:color">#2F64F6</item>
+        <item name="android:background">#2F64F6</item>
+
+    </style>
 </resources>

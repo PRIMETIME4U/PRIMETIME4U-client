@@ -2,6 +2,9 @@ package gwc.com.primetime4u;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
@@ -11,6 +14,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -53,7 +57,7 @@ import com.dexafree.materialList.view.MaterialListView;
 import com.dexafree.materialList.view.MaterialStaggeredGridView;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends ActionBarActivity {
 
     // Log tag
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -71,6 +75,9 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = this;
+
+
+
         movieList = new ArrayList<Movie>();
 
         //settaggio della listview delle card
@@ -98,6 +105,7 @@ public class MainActivity extends FragmentActivity {
         card.setTitle("Welcome to PRIMETIME4U");
 
 
+
         Drawable icon = getResources().getDrawable(R.drawable.ic_launcher);
         card.setBitmap(icon);
 
@@ -111,7 +119,7 @@ public class MainActivity extends FragmentActivity {
 
     }
     private void drawResult(){
-        System.out.println("Grandezza lista film: " + movieList.size());
+
         for (int i = 0; i < movieList.size(); i++) {
             Card currentcard = new SmallImageCard();
             Movie currentmovie = movieList.get(i);
@@ -142,6 +150,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
