@@ -57,7 +57,6 @@ public class MainActivity extends FragmentActivity {
 
     // Log tag
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final String url2 = "http://api.androidhive.info/json/movies.json";
     private static final String url = "http://hale-kite-786.appspot.com/schedule/free/today";
     private ProgressDialog pDialog;
     private List<Movie> movieList;
@@ -127,7 +126,7 @@ public class MainActivity extends FragmentActivity {
             currentcard.setBitmap(icon2);
 
             mListView.add(currentcard);
-            System.out.println("i'm here");
+
         }
 
 
@@ -190,9 +189,9 @@ public class MainActivity extends FragmentActivity {
                                     movie.setChannel(obj3.getString(("channel")));
                                     movie.setTime(obj3.getString("time"));
                                     movieList2.add(movie);
-                                    System.out.println(movieList2.size());
+
                                 }
-                                System.out.println("Size finale: "+movieList2.size());
+
                                 movieList=movieList2;
                                 drawResult();
                                 //movie.setRating(((Number) obj.get("rating"))
