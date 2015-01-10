@@ -2,6 +2,8 @@ package gwc.com.primetime4u;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -19,10 +21,11 @@ import android.os.Build;
 import android.webkit.WebView;
 import android.widget.ListView;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +38,7 @@ import primetime4u.adapter.CustomListAdapter;
 import primetime4u.app.AppController;
 import primetime4u.model.Movie;
 
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.dexafree.materialList.controller.OnDismissCallback;
 import com.dexafree.materialList.model.BasicButtonsCard;
 import com.dexafree.materialList.model.BasicImageButtonsCard;
@@ -53,9 +57,10 @@ public class MainActivity extends FragmentActivity {
 
     // Log tag
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final String url = "http://api.androidhive.info/json/movies.json";
+    private static final String url2 = "http://api.androidhive.info/json/movies.json";
+    private static final String url = "http://hale-kite-786.appspot.com/schedule/free/today";
     private ProgressDialog pDialog;
-    private List<Movie> movieList = new ArrayList<Movie>();
+    private List<Movie> movieList;
     private ListView listView;
     private CustomListAdapter adapter;
     private Context mContext;
@@ -67,105 +72,68 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = this;
+        movieList = new ArrayList<Movie>();
+
+        //settaggio della listview delle card
+        View view = findViewById(R.id.material_listview);
 
 
-        //TODO: https://github.com/dexafree/MaterialList/blob/master/app/src/main/java/com/dexafree/materiallistviewexample/MainActivity.java
-
-
-        android.app.FragmentManager fm = getFragmentManager();
-        android.app.FragmentTransaction ft = fm.beginTransaction();
-        Fragment button = new ButtonLista();
-        if (savedInstanceState == null) {
-            //inserisco il fragment del bottone nel layout container (inserirò altri fragment)
-            ft.add(R.id.container, button);
-            ft.addToBackStack(null);
-            ft.commit();
-
-
-
+        if(view instanceof MaterialListView) {
+            mListView = (MaterialListView) view;
+        } else {
+            mListView = (MaterialStaggeredGridView) view;
         }
+        mListView.setCardAnimation(MaterialListView.CardAnimation.SWING_BOTTOM_IN);
 
-        listView = (ListView) findViewById(R.id.listView);
-        adapter = new CustomListAdapter(this, movieList);
-        listView.setAdapter(adapter);
-
-        pDialog = new ProgressDialog(this);
-        // Showing progress dialog before making http request
-        pDialog.setMessage("Loading...");
-        pDialog.show();
-
-        // changing action bar color
-        //getActionBar().setBackgroundDrawable(
-        //       new ColorDrawable(Color.parseColor("#1b1b1b")));
-
-        // Creating volley request obj
-        JsonArrayRequest movieReq = new JsonArrayRequest(url,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d(TAG, response.toString());
-                        hidePDialog();
-
-                        // Parsing json
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-
-                                JSONObject obj = response.getJSONObject(i);
-                                Movie movie = new Movie();
-                                movie.setTitle(obj.getString("title"));
-                                movie.setThumbnailUrl(obj.getString("image"));
-                                movie.setRating(((Number) obj.get("rating"))
-                                        .doubleValue());
-                                movie.setYear(obj.getInt("releaseYear"));
-
-                                // Genre is json array
-                                JSONArray genreArry = obj.getJSONArray("genre");
-                                ArrayList<String> genre = new ArrayList<String>();
-                                for (int j = 0; j < genreArry.length(); j++) {
-                                    genre.add((String) genreArry.get(j));
-                                }
-                                movie.setGenre(genre);
-
-                                // adding movie to movies array
-                                movieList.add(movie);
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-
-                        // notifying list adapter about data changes
-                        // so that it renders the list view with updated data
-                        adapter.notifyDataSetChanged();
-                    }
-                }, new Response.ErrorListener() {
+        mListView.setOnDismissCallback(new OnDismissCallback() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-                hidePDialog();
-
+            public void onDismiss(Card card, int position) {
+                // QUANDO SWIPPIAMO VIA LA CARD EQUIVALE A UN NON MI PIACE
             }
         });
 
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(movieReq);
+        //creazioni card
 
-        //CHIEDI AL SERVER LISTA FILM VISTI -> ACTIVITY LISTA FILM
-
-        //CHIEDI AL SERVER PROGRAMMAZIONE DI STASERA
-
-        //VISUALIZZA FILM DI STASERA -> FRAGMENTS?
-
-        //ASSOCIA A OGNI FRAGMENT LISTENER -> activity film cliccato -> lo guardo/non lo guardo
+        Card card = new WelcomeCard();
+        card.setDescription("Tutorial");
+        card.setTitle("Welcome to PRIMETIME4U");
 
 
-        WebView wv = (WebView) findViewById(R.id.webView);
-        wv.loadUrl("http://hale-kite-786.appspot.com/");
+        Drawable icon = getResources().getDrawable(R.drawable.ic_launcher);
+        card.setBitmap(icon);
+
+        mListView.add(card);
+
+
+        // Creating volley request obj
+        new JsonRequest().execute(url);
+
 
 
     }
+    private void drawResult(){
+        System.out.println("Grandezza lista film: " + movieList.size());
+        for (int i = 0; i < movieList.size(); i++) {
+            Card currentcard = new SmallImageCard();
+            Movie currentmovie = movieList.get(i);
+            String title = currentmovie.getTitle();
+            if (!currentmovie.getOriginalTitle().equals("null"))
+                currentcard.setDescription("Titolo originale: " + currentmovie.getOriginalTitle() + "\n" + currentmovie.getTime() + "\n" + currentmovie.getChannel());
+            else
+                currentcard.setDescription(currentmovie.getTime() + "\n" + currentmovie.getChannel());
 
+            currentcard.setTitle(title);
+            Drawable icon2 = getResources().getDrawable(R.drawable.ic_launcher);
+            currentcard.setBitmap(icon2);
+
+            mListView.add(currentcard);
+            System.out.println("i'm here");
+        }
+
+
+
+
+    }
     private void hidePDialog() {
         if (pDialog != null) {
             pDialog.dismiss();
@@ -194,4 +162,78 @@ public class MainActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    class JsonRequest extends AsyncTask<String,Void,List<Movie>>{
+        List<Movie> movieList2 = new ArrayList<Movie>();
+        @Override
+        protected List<Movie> doInBackground(String... params) {
+
+
+            final String TAG =  MainActivity.class.getSimpleName();
+            JsonObjectRequest movieReq = new JsonObjectRequest(Request.Method.GET, params[0], null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d(TAG, response.toString());
+
+
+
+
+                            try {
+
+                                JSONObject obj = response.getJSONObject("data");
+                                JSONArray obj2 = obj.getJSONArray("schedule");
+                                for (int j=0;j<obj2.length();j++) {
+                                    JSONObject obj3 = obj2.getJSONObject(j);
+                                    Movie movie = new Movie();
+                                    movie.setTitle(obj3.getString("title"));
+                                    movie.setOriginalTitle(obj3.getString("originalTitle"));
+                                    movie.setChannel(obj3.getString(("channel")));
+                                    movie.setTime(obj3.getString("time"));
+                                    movieList2.add(movie);
+                                    System.out.println(movieList2.size());
+                                }
+                                System.out.println("Size finale: "+movieList2.size());
+                                movieList=movieList2;
+                                drawResult();
+                                //movie.setRating(((Number) obj.get("rating"))
+                                //        .doubleValue());
+                                //movie.setYear(obj.getInt("releaseYear"));
+
+                                // Genre is json array
+                                /*JSONArray genreArry = obj.getJSONArray("genre");
+                                ArrayList<String> genre = new ArrayList<String>();
+                                for (int j = 0; j < genreArry.length(); j++) {
+                                    genre.add((String) genreArry.get(j));
+                                }
+                                movie.setGenre(genre);*/
+
+                                // adding movie to movies array
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d(TAG, "Error: " + error.getMessage());
+                    hidePDialog();
+
+                }
+            });
+
+            // Adding request to request queue
+            AppController.getInstance().addToRequestQueue(movieReq);
+            return movieList2;
+        }
+
+        @Override
+        protected void onPostExecute(List<Movie> movies) {
+            hidePDialog();
+
+        }
+    }
+
 }
+

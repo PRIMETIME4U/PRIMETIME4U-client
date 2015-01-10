@@ -7,6 +7,9 @@ public class Movie {
     private String title, thumbnailUrl;
     private int year;
     private double rating;
+    private String channel;
+    private String originalTitle;
+    private String time;
     private ArrayList<String> genre;
 
     public Movie() {
@@ -28,6 +31,18 @@ public class Movie {
     public void setTitle(String name) {
         this.title = name;
     }
+
+    public String getOriginalTitle(){ return originalTitle;}
+
+    public void setOriginalTitle(String s){ this.originalTitle=s;}
+
+    public String getTime(){ return time;}
+
+    public void setTime(String time){ this.time=time;}
+
+    public String getChannel(){ return channel;}
+
+    public void setChannel(String channel){ this.channel=channel;}
 
     public String getThumbnailUrl() {
         return thumbnailUrl;
