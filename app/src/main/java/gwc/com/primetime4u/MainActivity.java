@@ -84,12 +84,12 @@ public class MainActivity extends FragmentActivity {
         }
         mListView.setCardAnimation(MaterialListView.CardAnimation.SWING_BOTTOM_IN);
 
-        mListView.setOnDismissCallback(new OnDismissCallback() {
+        /*mListView.setOnDismissCallback(new OnDismissCallback() {
             @Override
             public void onDismiss(Card card, int position) {
                 // QUANDO SWIPPIAMO VIA LA CARD EQUIVALE A UN NON MI PIACE
             }
-        });
+        });*/
 
         //creazioni card
 
@@ -124,7 +124,7 @@ public class MainActivity extends FragmentActivity {
             currentcard.setTitle(title);
             Drawable icon2 = getResources().getDrawable(R.drawable.ic_launcher);
             currentcard.setBitmap(icon2);
-
+            currentcard.setDismissible(false);
             mListView.add(currentcard);
 
         }
